@@ -1,43 +1,16 @@
-import { defineConfig } from "vite";
+// vite.config.ts
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
-import typescript from "@rollup/plugin-typescript";
-import path from "path";
-import { typescriptPaths } from "rollup-plugin-typescript-paths";
-
+// https://vitejs.dev/guide/build.html#library-mode
 export default defineConfig({
-  plugins: [],
-  resolve: {
-    alias: [
-      {
-        find: "~",
-        replacement: path.resolve(__dirname, "./src"),
-      },
-    ],
-  },
-  server: {
-    port: 3000,
-  },
   build: {
-    manifest: true,
-    minify: true,
-    reportCompressedSize: true,
     lib: {
-      entry: path.resolve(__dirname, "src/main.ts"),
-      fileName: "main",
-      formats: ["es", "cjs"],
-    },
-    rollupOptions: {
-      external: [],
-      plugins: [
-        typescriptPaths({
-          preserveExtensions: true,
-        }),
-        typescript({
-          sourceMap: false,
-          declaration: true,
-          outDir: "dist",
-        }),
-      ],
+      entry: resolve(__dirname, 'src/main.ts'),
+      name: 'main',
+      fileName: 'main',
     },
   },
+  plugins: [dts()],
 });
