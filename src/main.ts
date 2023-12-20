@@ -1,5 +1,5 @@
-import { StateCreator, StoreMutatorIdentifier } from 'zustand';
-import { checkIfChromeExist, excludeKeysAndFunctions } from './helpers';
+import { StateCreator, StoreMutatorIdentifier } from "zustand";
+import { checkIfChromeExist, excludeKeysAndFunctions } from "./helpers";
 
 type ChromeStoreType = <
   T = unknown,
@@ -15,23 +15,25 @@ type ChromeImpl = <T = unknown>(
   keysToexclude?: string[],
 ) => StateCreator<T, [], []>;
 
+const includeChromeStore_: ChromeImpl =
+  (f, keysToexclude) => (set, get, store) => {
+    checkIfChromeExist();
 
+    const saveInChromeExtentionStorage: typeof set = (...a) => {
+      set(...a);
+      chrome.storage.local.set(
+        excludeKeysAndFunctions(store.getState() as any, keysToexclude),
+      );
+    };
 
-const includeChromeStore_: ChromeImpl = (f, keysToexclude) => (set, get, store) => {
-  checkIfChromeExist();
+    store.setState = saveInChromeExtentionStorage;
 
-  const saveInChromeExtentionStorage: typeof set = (...a) => {
-    set(...a);
-    chrome.storage.local.set(excludeKeysAndFunctions(store.getState() as any, keysToexclude));
+    chrome.storage.local.get().then((obj) => {
+      set(obj as any);
+    });
+
+    return f(saveInChromeExtentionStorage, get, store);
   };
 
-  store.setState = saveInChromeExtentionStorage;
-
-  chrome.storage.local.get().then(obj => {
-    set(obj as any)
-  });
-
-  return f(saveInChromeExtentionStorage, get, store);
-};
-
-export const includeChromeStore = includeChromeStore_ as unknown as ChromeStoreType;
+export const includeChromeStore =
+  includeChromeStore_ as unknown as ChromeStoreType;

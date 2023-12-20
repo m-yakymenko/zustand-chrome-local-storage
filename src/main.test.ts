@@ -1,14 +1,14 @@
-import { afterEach, beforeEach, describe, expect, it, } from 'vitest';
-import { includeChromeStore } from './main';
-import { create } from 'zustand';
-import { type ObjectType } from './helpers';
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { includeChromeStore } from "./main";
+import { create } from "zustand";
+import { type ObjectType } from "./helpers";
 
 interface BearState {
-  bears: number,
-  cats: number,
-  increase: (by: number) => void,
-  increaseCats: (by: number) => void,
-};
+  bears: number;
+  cats: number;
+  increase: (by: number) => void;
+  increaseCats: (by: number) => void;
+}
 
 var mockedStorage: ObjectType = {};
 export const addChrome = () => {
@@ -18,20 +18,20 @@ export const addChrome = () => {
       local: {
         get: async (args?) => mockedStorage,
         set: async (obj: ObjectType) => {
-          Object.assign(mockedStorage, obj)
-        }
-      }
-    }
+          Object.assign(mockedStorage, obj);
+        },
+      },
+    },
   };
 };
 
 export const removeChrome = () => {
   //@ts-ignore
   global.chrome = undefined;
-  mockedStorage = {}
+  mockedStorage = {};
 };
 
-describe('includeChromeStore', () => {
+describe("includeChromeStore", () => {
   beforeEach(() => {
     addChrome();
   });
@@ -40,16 +40,19 @@ describe('includeChromeStore', () => {
     removeChrome();
   });
 
-  it('check if store works', async () => {
+  it("check if store works", async () => {
     const excludeKeys = ["cats"];
 
     const useBearStore = create<BearState>()(
-      includeChromeStore((set) => ({
-        bears: 0,
-        cats: 0,
-        increase: (by) => set((state) => ({ bears: state.bears + by })),
-        increaseCats: (by) => set((state) => ({ cats: state.cats + by })),
-      }), excludeKeys)
+      includeChromeStore(
+        (set) => ({
+          bears: 0,
+          cats: 0,
+          increase: (by) => set((state) => ({ bears: state.bears + by })),
+          increaseCats: (by) => set((state) => ({ cats: state.cats + by })),
+        }),
+        excludeKeys,
+      ),
     );
 
     expect(useBearStore.getState().bears).toEqual(0);
@@ -60,6 +63,5 @@ describe('includeChromeStore', () => {
     useBearStore.getState().increase(2);
     expect(useBearStore.getState().bears).toEqual(3);
     expect(await chrome.storage.local.get()).toEqual({ bears: 3 });
-  })
+  });
 });
-

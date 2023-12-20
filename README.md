@@ -23,8 +23,8 @@ const useBearStore = create()(
       cats: 0,
       increase: (by) => set((state) => ({ bears: state.bears + by })),
     }),
-    excludeKeys
-  )
+    excludeKeys,
+  ),
 );
 ```
 
