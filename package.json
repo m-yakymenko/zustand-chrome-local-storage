@@ -1,0 +1,39 @@
+{
+  "name": "zustand-chrome-local-storage",
+  "private": true,
+  "version": "0.0.0",
+  "author": "Mykola Yakymenko",
+  "description": "Adds memory support for chrome extensions via zustand",
+  "homepage": "https://github.com/m-yakymenko/zustand-chrome-local-storage",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "state",
+    "manager",
+    "management",
+    "redux",
+    "store",
+    "chrome",
+    "extension",
+    "chrome-extension",
+    "webextension",
+    "browser",
+    "browser-extension"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m-yakymenko/zustand-chrome-local-storage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/m-yakymenko/zustand-chrome-local-storage/issues"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
