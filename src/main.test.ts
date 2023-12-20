@@ -1,16 +1,17 @@
-import { afterEach, beforeEach, describe, expect, it, } from 'vitest'
-import { loadChromeStore } from './main';
-import { create } from 'zustand'
+import { afterEach, beforeEach, describe, expect, it, } from 'vitest';
+import { includeChromeStore } from './main';
+import { create } from 'zustand';
 import { type ObjectType } from './helpers';
 
 interface BearState {
-  bears: number
-  increase: (by: number) => void
+  bears: number,
+  cats: number,
+  increase: (by: number) => void,
+  increaseCats: (by: number) => void,
 };
 
 var mockedStorage: ObjectType = {};
 export const addChrome = () => {
-
   global.chrome = {
     storage: {
       // @ts-ignore
@@ -22,9 +23,7 @@ export const addChrome = () => {
       }
     }
   };
-}
-
-export const wait = (ms: number) => new Promise(res => setTimeout(res, ms))
+};
 
 export const removeChrome = () => {
   //@ts-ignore
@@ -32,7 +31,7 @@ export const removeChrome = () => {
   mockedStorage = {}
 };
 
-describe('loadChromeStore', () => {
+describe('includeChromeStore', () => {
   beforeEach(() => {
     addChrome();
   });
@@ -42,16 +41,22 @@ describe('loadChromeStore', () => {
   });
 
   it('check if store works', async () => {
+    const excludeKeys = ["cats"];
+
     const useBearStore = create<BearState>()(
-      loadChromeStore((set) => ({
+      includeChromeStore((set) => ({
         bears: 0,
+        cats: 0,
         increase: (by) => set((state) => ({ bears: state.bears + by })),
-      }))
-    )
+        increaseCats: (by) => set((state) => ({ cats: state.cats + by })),
+      }), excludeKeys)
+    );
 
     expect(useBearStore.getState().bears).toEqual(0);
     useBearStore.getState().increase(1);
+    useBearStore.getState().increaseCats(2);
     expect(useBearStore.getState().bears).toEqual(1);
+    expect(useBearStore.getState().cats).toEqual(2);
     useBearStore.getState().increase(2);
     expect(useBearStore.getState().bears).toEqual(3);
     expect(await chrome.storage.local.get()).toEqual({ bears: 3 });

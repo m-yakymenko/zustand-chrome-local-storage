@@ -17,7 +17,7 @@ type ChromeImpl = <T = unknown>(
 
 
 
-const loadChromeStore_: ChromeImpl = (f, keysToexclude) => (set, get, store) => {
+const includeChromeStore_: ChromeImpl = (f, keysToexclude) => (set, get, store) => {
   checkIfChromeExist();
 
   const saveInChromeExtentionStorage: typeof set = (...a) => {
@@ -34,4 +34,4 @@ const loadChromeStore_: ChromeImpl = (f, keysToexclude) => (set, get, store) => 
   return f(saveInChromeExtentionStorage, get, store);
 };
 
-export const loadChromeStore = loadChromeStore_ as unknown as ChromeStoreType;
+export const includeChromeStore = includeChromeStore_ as unknown as ChromeStoreType;
