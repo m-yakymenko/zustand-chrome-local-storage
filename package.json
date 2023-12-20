@@ -1,6 +1,6 @@
 {
   "name": "zustand-chrome-local-storage",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Mykola Yakymenko",
   "description": "Adds memory support for chrome extensions via zustand",
   "homepage": "https://github.com/m-yakymenko/zustand-chrome-local-storage",
@@ -40,10 +40,9 @@
     "build": "tsc && vite build",
     "start": "tsc && vite build --watch",
     "prettier": "prettier . --write",
-    "prepare": "husky install",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepublishOnly": "npm run build"
+    "prepare": "husky install && npm run build"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.254",
