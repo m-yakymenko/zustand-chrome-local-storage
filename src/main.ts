@@ -1,24 +1,34 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { StateCreator, StoreMutatorIdentifier } from 'zustand'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+type ChromeStoreType = <
+  T = unknown,
+  Mps extends [StoreMutatorIdentifier, unknown][] = [],
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
+>(
+  f: StateCreator<T, Mps, Mcs>,
+  keysToExeclude?: string[],
+) => StateCreator<T, Mps, Mcs>
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+type ChromeImpl = <T = unknown>(
+  f: StateCreator<T, [], []>,
+  keysToExeclude?: string[],
+) => StateCreator<T, [], []>
+
+const getSuperObj = (args: Record<string, any>[]) => args.reduce((acc, item) => ({ ...acc, ...item }), {} as Record<string, any>)
+const execludeKeys = (obj: Record<string, any>, keysToExeclude: string[] | undefined): Record<string, any> => {
+  if (!keysToExeclude || keysToExeclude.length === 0) return obj
+  return Object.fromEntries(Object.entries(obj).filter(([key]) => !keysToExeclude.includes(key)))
+}
+
+const loadChromeStore_: ChromeImpl = (f, keysToExeclude) => (set, get, store) => {
+  const saveInChromeExtentionStorage: typeof set = (...a) => {
+    set(...a)
+    chrome.storage.local.set(execludeKeys(getSuperObj(a as any), keysToExeclude))
+  }
+  store.setState = saveInChromeExtentionStorage
+  chrome.storage.local.get().then(obj => set(obj as any))
+
+  return f(saveInChromeExtentionStorage, get, store)
+}
+
+export const loadChromeStore = loadChromeStore_ as unknown as ChromeStoreType

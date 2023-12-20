@@ -27,13 +27,33 @@
   "bugs": {
     "url": "https://github.com/m-yakymenko/zustand-chrome-local-storage/issues"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.cjs.js"
+    }
+  },
+  "main": "./dist/main.cjs.js",
+  "module": "./dist/main.es.js",
+  "typings": "./dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "start": "tsc && vite build --watch",
+    "dev": "vite"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/chrome": "^0.0.254",
+    "@types/node": "^20.10.5",
+    "rollup-plugin-typescript-paths": "^1.4.0",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "zustand": "^4.4.7"
   }
 }
