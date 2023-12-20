@@ -1,5 +1,5 @@
 import { StateCreator, StoreMutatorIdentifier } from 'zustand';
-import { execludeKeys, getSuperObj } from './helpers';
+import { checkIfChromeExist, execludeKeys, getSuperObj } from './helpers';
 
 type ChromeStoreType = <
   T = unknown,
@@ -18,9 +18,11 @@ type ChromeImpl = <T = unknown>(
 
 
 const loadChromeStore_: ChromeImpl = (f, keysToExeclude) => (set, get, store) => {
+  checkIfChromeExist();
+
   const saveInChromeExtentionStorage: typeof set = (...a) => {
-    set(...a)
-    chrome.storage.local.set(execludeKeys(getSuperObj(a as any), keysToExeclude))
+    set(...a);
+    chrome.storage.local.set(execludeKeys(getSuperObj(a as any), keysToExeclude));
   };
 
   store.setState = saveInChromeExtentionStorage;
