@@ -1,5 +1,5 @@
 import { StateCreator, StoreMutatorIdentifier } from 'zustand';
-import { checkIfChromeExist, execludeKeys, getSuperObj } from './helpers';
+import { checkIfChromeExist, excludeKeysAndFunctions } from './helpers';
 
 type ChromeStoreType = <
   T = unknown,
@@ -7,27 +7,29 @@ type ChromeStoreType = <
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   f: StateCreator<T, Mps, Mcs>,
-  keysToExeclude?: string[],
+  keysToexclude?: string[],
 ) => StateCreator<T, Mps, Mcs>;
 
 type ChromeImpl = <T = unknown>(
   f: StateCreator<T, [], []>,
-  keysToExeclude?: string[],
+  keysToexclude?: string[],
 ) => StateCreator<T, [], []>;
 
 
 
-const loadChromeStore_: ChromeImpl = (f, keysToExeclude) => (set, get, store) => {
+const loadChromeStore_: ChromeImpl = (f, keysToexclude) => (set, get, store) => {
   checkIfChromeExist();
 
   const saveInChromeExtentionStorage: typeof set = (...a) => {
     set(...a);
-    chrome.storage.local.set(execludeKeys(getSuperObj(a as any), keysToExeclude));
+    chrome.storage.local.set(excludeKeysAndFunctions(store.getState() as any, keysToexclude));
   };
 
   store.setState = saveInChromeExtentionStorage;
 
-  chrome.storage.local.get().then(obj => set(obj as any));
+  chrome.storage.local.get().then(obj => {
+    set(obj as any)
+  });
 
   return f(saveInChromeExtentionStorage, get, store);
 };
