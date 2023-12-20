@@ -7,22 +7,22 @@ type ChromeStoreType = <
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   f: StateCreator<T, Mps, Mcs>,
-  keysToexclude?: string[],
+  keysToExclude?: string[],
 ) => StateCreator<T, Mps, Mcs>;
 
 type ChromeImpl = <T = unknown>(
   f: StateCreator<T, [], []>,
-  keysToexclude?: string[],
+  keysToExclude?: string[],
 ) => StateCreator<T, [], []>;
 
 const includeChromeStore_: ChromeImpl =
-  (f, keysToexclude) => (set, get, store) => {
+  (f, keysToExclude) => (set, get, store) => {
     checkIfChromeExist();
 
     const saveInChromeExtentionStorage: typeof set = (...a) => {
       set(...a);
       chrome.storage.local.set(
-        excludeKeysAndFunctions(store.getState() as any, keysToexclude),
+        excludeKeysAndFunctions(store.getState() as any, keysToExclude),
       );
     };
 
