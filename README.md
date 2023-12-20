@@ -25,8 +25,8 @@ const useBearStore = create()(
       cats: 0,
       increase: (by) => set((state) => ({ bears: state.bears + by })),
     }),
-    keysToExclude
-  )
+    keysToExclude,
+  ),
 );
 ```
 
@@ -49,7 +49,7 @@ When you change your data this function calls:
 const saveInChromeExtentionStorage: typeof set = (...a) => {
   set(...a);
   chrome.storage.local.set(
-    excludeKeysAndFunctions(store.getState(), keysToExclude)
+    excludeKeysAndFunctions(store.getState(), keysToExclude),
   );
 };
 ```
