@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest an enhancement to the library
-title: ''
+title: ""
 labels: enhancement, triage
-assignees: ''
+assignees: ""
 ---
 
 **Is your feature request related to a current problem? Please describe.**

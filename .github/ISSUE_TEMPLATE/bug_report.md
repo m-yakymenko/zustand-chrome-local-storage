@@ -1,9 +1,9 @@
 ---
 name: Bug report
 about: Create a bug report to help us fix it
-title: '[BUG]'
+title: "[BUG]"
 labels: bug, triage
-assignees: ''
+assignees: ""
 ---
 
 **Describe the bug**
