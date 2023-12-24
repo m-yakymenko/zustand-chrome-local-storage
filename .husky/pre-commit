@@ -1,7 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn test
-yarn build
-#git add dist
-#yarn commit:dist
+npm run format:changed

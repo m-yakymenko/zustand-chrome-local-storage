@@ -39,7 +39,9 @@
   "scripts": {
     "build": "tsc && vite build",
     "start": "tsc && vite build --watch",
-    "prettier": "prettier . --write",
+    "format": "prettier --write .",
+    "format:changed": "git diff --name-only --diff-filter=d --staged | xargs prettier -u --write && git diff --name-only --diff-filter=d --staged | xargs git add",
+    "commit:dist": "if git diff --name-only --diff-filter=d --staged dist; then git add dist && git commit -m 'Add dist directory'",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky install"
