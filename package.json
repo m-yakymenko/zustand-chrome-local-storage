@@ -1,6 +1,6 @@
 {
   "name": "zustand-chrome-local-storage",
-  "version": "0.0.4",
+  "version": "0.0.5-alpha",
   "author": "Mykola Yakymenko",
   "description": "Adds memory support for chrome extensions via zustand",
   "homepage": "https://github.com/m-yakymenko/zustand-chrome-local-storage",
@@ -41,7 +41,6 @@
     "start": "tsc && vite build --watch",
     "format": "prettier --write .",
     "format:changed": "git diff --name-only --diff-filter=d --staged | xargs prettier -u --write && git diff --name-only --diff-filter=d --staged | xargs git add",
-    "commit:dist": "if git diff --name-only --diff-filter=d --staged dist; then git add dist && git commit -m 'Add dist directory'",
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
