@@ -2,4 +2,3 @@
 .husky
 src
 node_modules
-*.ts

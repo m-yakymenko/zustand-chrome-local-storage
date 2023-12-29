@@ -1,6 +1,6 @@
 {
   "name": "zustand-chrome-local-storage",
-  "version": "0.0.5-alpha-1",
+  "version": "0.0.5-alpha-2",
   "author": "Mykola Yakymenko",
   "description": "Adds memory support for chrome extensions via zustand",
   "homepage": "https://github.com/m-yakymenko/zustand-chrome-local-storage",
